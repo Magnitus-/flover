@@ -1,0 +1,42 @@
+{
+  "name": "files-keeper-models",
+  "version": "0.1.0",
+  "description": "Centralized model for my files-keeper projects",
+  "keywords": [
+    "files",
+    "store",
+    "model"
+  ],
+  "author": "Eric Vallee <eric_vallee@webificservices.com>",
+  "main": "index.js",
+  "repository": {
+    "type": "git",
+    "url": "http://github.com/Magnitus-/files-keeper-models"
+  },
+  "bugs": {
+    "url": "http://github.com/Magnitus-/files-keeper-models",
+    "email": "eric_vallee@webificservices.com"
+  },
+  "licenses": [
+    {
+      "type": "MIT License",
+      "url": "http://mit-license.org/"
+    }
+  ],
+  "dependencies": {
+    "ramda": "^0.25.0",
+    "ramda-lens-converter": "^0.1.0"
+  },
+  "scripts": {
+    "test": "nodeunit tests"
+  },
+  "devDependencies": {
+    "nodeunit": "^0.11.2"
+  },
+  "license": "MIT",
+  "files": [
+    "index.js",
+    "License.txt",
+    "README.md"
+  ]
+}
