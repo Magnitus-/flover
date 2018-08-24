@@ -1,5 +1,5 @@
 {
-  "name": "files-keeper-models",
+  "name": "flover",
   "version": "0.1.0",
   "description": "Centralized model for my files-keeper projects",
   "keywords": [
@@ -11,10 +11,10 @@
   "main": "index.js",
   "repository": {
     "type": "git",
-    "url": "http://github.com/Magnitus-/files-keeper-models"
+    "url": "http://github.com/Magnitus-/flover"
   },
   "bugs": {
-    "url": "http://github.com/Magnitus-/files-keeper-models",
+    "url": "http://github.com/Magnitus-/flover",
     "email": "eric_vallee@webificservices.com"
   },
   "licenses": [

@@ -1,6 +1,9 @@
 const R = require('ramda');
 const { lensToProperties } = require('ramda-lens-converter');
 
+const isDefined = R.compose(R.not, R.identical(undefined));
+const emptyObj = () => {return {}};
+
 const fileLenses = {
     'id': R.lensProp('id'),
     'metadata': R.lensProp('metadata'),
@@ -14,9 +17,13 @@ const fileLenses = {
     'group': R.lensProp('group')
 }
 
+const _filesGroupId = {
+    get: R.path(['group', 'id']),
+    set: R.assocPath(['group', 'id'])
+};
 
-const setFileGroupFiles = R.curry((files, filesGroup) => {
-    const id = R.path(['group', 'id'], filesGroup);
+const setFilesGroupFiles = R.curry((files, filesGroup) => {
+    const id = _filesGroupId.get(filesGroup);
     return R.assoc(
         'files',
         R.map(
@@ -27,7 +34,7 @@ const setFileGroupFiles = R.curry((files, filesGroup) => {
     );
 });
 
-const setFileGroupId = R.curry((id, filesGroup) => {
+const setFilesGroupId = R.curry((id, filesGroup) => {
     return R.compose(
         R.ifElse(
             R.has('files'),
@@ -37,28 +44,42 @@ const setFileGroupId = R.curry((id, filesGroup) => {
             ),
             R.identity
         ),
-        R.assocPath(['group', 'id'], id)
+        _filesGroupId.set(id)
     )(filesGroup);
 })
 
 const filesGroupLenses = {
     'id': R.lens(
-        R.path(['group', 'id']),
-        setFileGroupId
+        _filesGroupId.get,
+        setFilesGroupId
     ),
     'matchOn': R.lensPath(['group', 'matchOn']),
     'duplicationThreshold': R.lens(
         R.pathOr(1, ['group', 'duplicationThreshold']),
         R.assocPath(['group', 'duplicationThreshold'])
     ),
-    'metadata': R.lensPath(['group', 'metadata']),
+    'metadata': R.lens(
+        //Cannot use pathOr, as the default value would become a global reference to an object
+        R.compose(R.ifElse(isDefined, R.identity, emptyObj), R.path(['group', 'metadata'])),
+        R.assocPath(['group', 'metadata'])
+    ),
+    'timestamp': R.lensPath(['group', 'timestamp']),
     'files': R.lens(
         R.props('files'),
-        setFileGroupFiles
+        setFilesGroupFiles
     )
 }
 
+const filesGroup = R.merge(
+    lensToProperties(filesGroupLenses),
+    {
+        getMetadataKey: R.curry((key, obj) => {
+            return R.compose(R.prop(key), R.view(filesGroupLenses.metadata))(obj);
+        })
+    }
+)
+
 module.exports = {
-    file: lensToProperties(fileLenses),
-    filesGroup: lensToProperties(filesGroupLenses)
+    file = lensToProperties(fileLenses),
+    filesGroup
 }
