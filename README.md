@@ -1,12 +1,12 @@
 # Overview
 
-Short for 'File Lover', Flover is a open solution to archive/backup files of any kind (though it is biased toward binary-like files and doesn't contain a mechanism to only store differentials so constantly evolving text files, like code for example, are best stored in a version control system like Git)
+Short for "File Lover", Flover is a open solution to archive/backup files of any kind (though it is biased toward binary-like files and doesn't contain a mechanism to only store differentials so constantly evolving text files, like code for example, are best stored in a version control system like Git)
 
 The core idea is to decouple the components of a file storage solution (backend API, storage plugin, model, client), provide a clear contract between components and enough flexibility that various kinds of files can be stored.
 
-This repo will contain the javascript model and the specs for the contracts between the components.
+This repo contains the javascript model. The specs for the contracts between the components will be added later.
 
-As I'm currently implementing an API backend for it with Express and a storage plugin with MongoDB/GridFS. Until I have a fully working implementation, consider this repository a work in progress.
+I'm currently implementing an API backend for it with Express and a storage plugin with MongoDB/GridFS. Until I have a full working implementation, consider this repository a work in progress.
 
 # Model
 
