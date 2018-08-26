@@ -25,14 +25,20 @@ const _filesGroupId = {
 
 const setFilesGroupFiles = R.curry((files, filesGroup) => {
     const id = _filesGroupId.get(filesGroup);
-    return R.assoc(
-        'files',
-        R.map(
-            R.set(fileLenses.group, id),
-            files
+    return R.ifElse(
+        R.pathSatisfies(isDefined, ['group', 'id']),
+        R.assoc(
+            'files',
+            R.map(
+                R.set(fileLenses.group, id),
+                files
+            )
         ),
-        filesGroup
-    );
+        R.assoc(
+            'files',
+            files
+        )
+    )(filesGroup);
 });
 
 const setFilesGroupId = R.curry((id, filesGroup) => {

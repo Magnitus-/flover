@@ -144,16 +144,81 @@ test('Test metadata', function(t) {
 });
 
 test('Test timestamp', function(t) {
-    t.plan(0);
-    t.end();
+    t.plan(2);
+
+    t.ok(
+        R.equals(
+            R.compose(
+                filesGroup.getTimestamp,
+                filesGroup.overTimestamp(R.multiply(2)),
+                filesGroup.setTimestamp(2)
+            )({}),
+            4,
+        ),
+        "The getter, setter and over should work as expected"
+    );
+
+    var group = filesGroup.setTimestamp(2, {});
+    filesGroup.overTimestamp(R.multiply(2), group);
+
+    t.ok(
+        R.equals(
+            filesGroup.getTimestamp(group),
+            2
+        ),
+        "The setters should respect immutability"
+    );
 });
 
 test('Test files', function(t) {
-    t.plan(0);
-    t.end();
+    t.plan(3);
+
+    t.ok(
+        R.equals(
+            R.compose(
+                filesGroup.getFiles(),
+                filesGroup.overFiles(R.map(R.assoc('b', 2))),
+                filesGroup.setFiles([{'a': 1}, {'a': 1}, {'a': 1}])
+            )({}),
+            [{'a': 1, 'b': 2}, {'a': 1, 'b': 2}, {'a': 1, 'b': 2}]
+        ),
+        "The getter, setter and over should work as expected"
+    );
+
+    t.ok(
+        R.compose(
+            R.all(
+                R.compose(R.equals('id'), file.getGroup)
+            ),
+            filesGroup.getFiles,
+            filesGroup.setFiles([{}, {}, {}]),
+            filesGroup.setId('id')
+        )({}),
+        "If the group has an id, the setter should set the files group to that id"
+    );
+
+    var group = filesGroup.setFiles([{'a': 1}, {'a': 1}, {'a': 1}], {});
+    filesGroup.overFiles(R.map(R.assoc('b', 2)));
+
+    t.ok(
+        R.equals(
+            filesGroup.getFiles(group),
+            [{'a': 1}, {'a': 1}, {'a': 1}]
+        ),
+        "The setters should respect immutability"
+    );
 });
 
 test('Test getMetadataKey', function(t) {
-    t.plan(0);
-    t.end();
+    t.plan(1);
+
+    const group = filesGroup.setMetadata({'a': 1, 'b': 2}, {});
+
+    t.ok(
+        R.and(
+            R.compose(R.equals(1), filesGroup.getMetadataKey('a')),
+            R.compose(R.equals(2), filesGroup.getMetadataKey('b'))
+        )(group),
+        "The getter should work as expected"
+    )
 });
