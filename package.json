@@ -28,7 +28,7 @@
     "ramda-lens-converter": "^0.1.0"
   },
   "scripts": {
-    "test": "nodeunit tests"
+    "test": "node tests/file.js && node tests/filesGroup.js"
   },
   "devDependencies": {
     "tape": "^4.9.1"
