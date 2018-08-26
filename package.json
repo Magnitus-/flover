@@ -31,7 +31,7 @@
     "test": "nodeunit tests"
   },
   "devDependencies": {
-    "nodeunit": "^0.11.2"
+    "tape": "^4.9.1"
   },
   "license": "MIT",
   "files": [

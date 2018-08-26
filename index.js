@@ -11,6 +11,7 @@ const fileLenses = {
         R.ifElse(R.has('title'), R.prop('title'), R.prop('id')),
         R.assoc('title')
     ),
+    'content': R.lensProp('content'),
     'mimeType': R.lensProp('mimeType'),
     'encoding': R.lensProp('encoding'),
     'md5': R.lensProp('md5'),
@@ -36,13 +37,12 @@ const setFilesGroupFiles = R.curry((files, filesGroup) => {
 
 const setFilesGroupId = R.curry((id, filesGroup) => {
     return R.compose(
-        R.ifElse(
+        R.when(
             R.has('files'),
             R.over(
                 R.lensProp('files'),
                 R.map(R.set(fileLenses.group, id))
-            ),
-            R.identity
+            )
         ),
         _filesGroupId.set(id)
     )(filesGroup);
@@ -60,12 +60,12 @@ const filesGroupLenses = {
     ),
     'metadata': R.lens(
         //Cannot use pathOr, as the default value would become a global reference to an object
-        R.compose(R.ifElse(isDefined, R.identity, emptyObj), R.path(['group', 'metadata'])),
+        R.compose(R.unless(isDefined, emptyObj), R.path(['group', 'metadata'])),
         R.assocPath(['group', 'metadata'])
     ),
     'timestamp': R.lensPath(['group', 'timestamp']),
     'files': R.lens(
-        R.props('files'),
+        R.prop('files'),
         setFilesGroupFiles
     )
 }
@@ -80,6 +80,6 @@ const filesGroup = R.merge(
 )
 
 module.exports = {
-    file = lensToProperties(fileLenses),
+    file: lensToProperties(fileLenses),
     filesGroup
 }
